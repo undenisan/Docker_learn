@@ -8,4 +8,4 @@ EXPOSE 80
 WORKDIR /app
 COPY --from=build /src/WebApplication_DIT_Docker/bin/Debug/net6.0/*.dll /app/
 COPY --from=build /src/WebApplication_DIT_Docker/bin/Debug/net6.0/*.json /app/
-ENTRYPOINT ["dotnet", "/app/WebApplication_DIT_Docker.dll"]
+ENTRYPOINT ["dotnet", "WebApplication_DIT_Docker.dll"]
