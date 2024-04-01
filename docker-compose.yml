@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  docker55:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: docker55:latest
+    container_name: docker55
+    ports:
+      - 5000:80
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: '1'
