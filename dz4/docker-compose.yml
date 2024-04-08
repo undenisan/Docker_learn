@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+  nginx-weather:
+    build:
+      context: ./
+      dockerfile: nginx.Dockerfile
+    image: nginx-weather:latest
+    container_name: nginx-weather
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-weather.conf:/etc/nginx/sites-available/nginx-weather.conf
+    depends_on:
+      - weather-app
+
+  weather-app:
+    build: .
+    image: weather-app:2.0
+    container_name: weather-app
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1"
