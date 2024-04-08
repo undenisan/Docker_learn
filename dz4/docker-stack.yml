@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+
+  nginx-weather:
+    image: nginx-weather:latest
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+    ports:
+      - "80:80"
+    environment:
+      TZ: "Europe/Moscow"
+    depends_on:
+      - weather-app
+    configs:
+      - source: nginx-weather.conf
+        target: /etc/nginx/sites-available/nginx-weather.conf
+
+  weather-app:
+    image: weather-app:2.0
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+    environment:
+      TZ: "Europe/Moscow"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+
+configs:
+  nginx-weather.conf:
+    file: nginx-weather.conf
